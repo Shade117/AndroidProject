@@ -36,7 +36,12 @@ public class LoginActivity extends Activity {
                 test.put("username", txtusername.getText().toString());
                 test.put("password", txtpassword.getText().toString());
                 JSONObject output = null;
-                output = CH.DatabasePOST(LoginURL, test);
+                String out = CH.DatabasePOST(LoginURL, test);
+                try {
+                    output = new JSONObject(out);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
                 try {
                     if(output.has("id")) {
                         UserDataHelper userDataHelper = new UserDataHelper(getApplicationContext());

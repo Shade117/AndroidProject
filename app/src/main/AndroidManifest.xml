@@ -24,6 +24,8 @@
         </activity>
         <activity android:name=".Unavailabilty">
         </activity>
+        <activity android:name=".TaskDetails">
+        </activity>
     </application>
 
 </manifest>

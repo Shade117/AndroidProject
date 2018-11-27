@@ -15,9 +15,9 @@ import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
 
 public class DataBaseConnectionHelper {
-    JSONObject output = new JSONObject();
+    String output = "";
     HashMap input;
-    public JSONObject DatabasePOST(final String urlString, HashMap hashmap) {
+    public String DatabasePOST(final String urlString, HashMap hashmap) {
         class GetJSON extends AsyncTask<Void, Void, String> {
 
             @Override
@@ -30,11 +30,6 @@ public class DataBaseConnectionHelper {
                 if(android.os.Debug.isDebuggerConnected())
                     android.os.Debug.waitForDebugger();
                 super.onPostExecute(s);
-                try {
-                    output = new JSONObject(s);
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
 
             }
 
@@ -73,9 +68,8 @@ public class DataBaseConnectionHelper {
                     while ((json = bufferedReader.readLine()) != null) {
                         sb.append(json + "\n");
                     }
-                    String jsontest = sb.toString().trim();
-                    output = new JSONObject(jsontest);
-                    return jsontest;
+                    output = sb.toString().trim();
+                    return output;
                 } catch (Exception e) {
                     Log.e("Dammit", e.toString());
                     return e.toString();

@@ -2,6 +2,7 @@ package com.example.kelro.bit_services.DataBaseHelpers;
 
 import android.content.ContentValues;
 import android.content.Context;
+import android.database.Cursor;
 import android.database.DatabaseUtils;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
@@ -9,7 +10,7 @@ import android.util.Log;
 import com.example.kelro.bit_services.Entity.User;
 
 public class UserDataHelper extends SQLiteOpenHelper {
-    private static final int DATABASE_VERSION = 2;
+    private static final int DATABASE_VERSION = 3;
     private static String DATABASE_NAME = "BIT-Services";
     private static String TABLE_NAME = "User";
     private static String KEY_ID = "id";
@@ -74,5 +75,18 @@ public class UserDataHelper extends SQLiteOpenHelper {
     public void Logout() {
         db = this.getWritableDatabase();
         db.execSQL("DELETE FROM "+ TABLE_NAME);
+    }
+
+    public int GetLoginID() {
+        db = this.getReadableDatabase();
+        Cursor data = db.rawQuery("SELECT "+KEY_ID+" from "+TABLE_NAME, null);
+        int bob = data.getCount();
+        if (data.moveToNext()) {
+            do {
+                return data.getInt(data.getColumnIndex("id"));
+            } while (data.moveToNext());
+        }
+        data.close();
+        return 0;
     }
 }
