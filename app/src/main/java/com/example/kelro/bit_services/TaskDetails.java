@@ -3,17 +3,33 @@ package com.example.kelro.bit_services;
 import android.app.Activity;
 import android.content.Intent;
 import android.database.Cursor;
+import android.net.Uri;
 import android.os.Bundle;
+import android.provider.Telephony;
+import android.util.Log;
+import android.view.View;
+import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 import com.example.kelro.bit_services.DataBaseHelpers.AssignmentDataHelper;
+import com.example.kelro.bit_services.DataBaseHelpers.DataBaseConnectionHelper;
 import com.example.kelro.bit_services.Entity.Assignment;
+import com.example.kelro.bit_services.Entity.Task;
+
+import java.net.URI;
+import java.util.HashMap;
+import java.util.Locale;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class TaskDetails extends Activity {
     TextView txtTaskName, txtStatus, txtTaskInfo, txtDate, txtStartTime, txtEndTime, txtAddress, txtContact;
+    Button btnAccept, btnDecline, btnSMS, btnLocation, btnComplete;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_task_details);
+        btnLocation = findViewById(R.id.btnLocation);
         txtTaskName = findViewById(R.id.txtTaskName);
         txtStatus = findViewById(R.id.txtStatus);
         txtTaskInfo = findViewById(R.id.txtInfo);
@@ -22,8 +38,78 @@ public class TaskDetails extends Activity {
         txtEndTime = findViewById(R.id.txtEndTime);
         txtAddress = findViewById(R.id.txtAddress);
         txtContact = findViewById(R.id.txtContact);
-        Intent intent = getIntent();
+        btnSMS = findViewById(R.id.btnSMS);
+        btnAccept = findViewById(R.id.btnAccept);
+        btnDecline = findViewById(R.id.btnDecline);
+        btnComplete = findViewById(R.id.btnComplete);
+        final Intent intent = getIntent();
         SetDetails(intent.getStringExtra("id"));
+        btnLocation.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Pattern p = Pattern.compile("(^\\d*) ([A-z ]*) (Rd|St|Ln|Av)\\n(\\w*)\\n([A-z]*) (\\d*)$");
+                Matcher m = p.matcher(txtAddress.getText());
+                if (m.find()) {
+                    Uri navigationIntentUri = Uri.parse("google.navigation:q=" + m.group(0));
+                    Intent mapIntent = new Intent(Intent.ACTION_VIEW, navigationIntentUri);
+                    mapIntent.setPackage("com.google.android.apps.maps");
+                    startActivity(mapIntent);
+                }
+            }
+        });
+        btnSMS.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //Pattern p = Pattern.compile("(\\d{10})");
+                //Matcher m = p.matcher(txtContact.getText());
+                //if (m.find()) {
+                    Intent sendIntent = new Intent(Intent.ACTION_VIEW);
+                    sendIntent.setData(Uri.parse("sms: "+ txtContact.getText().toString().substring(12)));
+                    // Allows adding template msg
+                    sendIntent.putExtra("sms_body", "");
+                    startActivity(sendIntent);
+                //}
+                //Intent intent = new Intent(Intent.ACTION_VIEW, Uri.fromParts("sms", m.group(1), null));
+                //startActivity(intent);
+            }
+        });
+        btnAccept.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (txtStatus.getText().toString().equals("Status: Pending")) {
+                    Task.SetTaskAccepted(getApplicationContext(),intent.getStringExtra("id"));
+                    txtStatus.setText("Accepted");
+                    Toast.makeText(TaskDetails.this, "Accepted", Toast.LENGTH_SHORT).show();
+                }
+                else {
+                    Toast.makeText(TaskDetails.this, "Unable to accept status not pending", Toast.LENGTH_LONG).show();
+                }
+            }
+        });
+        btnDecline.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (txtStatus.getText().toString().equals("Status: Pending")) {
+                    txtStatus.setText("Denied");
+                    Task.SetTaskDenied(getApplicationContext(), intent.getStringExtra("id"));
+                    Toast.makeText(TaskDetails.this, "Declined", Toast.LENGTH_SHORT).show();
+                }
+                else {
+                    Toast.makeText(TaskDetails.this, "Unable to decline status not pending", Toast.LENGTH_LONG).show();
+                }
+            }
+        });
+
+        btnComplete.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (txtStatus.getText().toString().equals("Status: Accepted")) {
+                    Intent i = new Intent(getApplicationContext(), Compete.class);
+                    i.putExtra("id", intent.getStringExtra("id"));
+                    startActivity(i);
+                }
+            }
+        });
     }
 
     private void SetDetails(String id) {

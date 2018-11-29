@@ -1,0 +1,42 @@
+{
+  "project_info": {
+    "project_number": "1001295158081",
+    "firebase_url": "https://bit-services-747e3.firebaseio.com",
+    "project_id": "bit-services-747e3",
+    "storage_bucket": "bit-services-747e3.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1001295158081:android:e83aee4bf70e7579",
+        "android_client_info": {
+          "package_name": "com.example.kelro.bit_services"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1001295158081-l6gihte3c7dse1am7objraua84lj19kl.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBGS11FlxP3LD0biJnIO1Offs6pSk3fxnQ"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
