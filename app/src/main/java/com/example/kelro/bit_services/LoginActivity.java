@@ -55,12 +55,22 @@ public class LoginActivity extends Activity {
                 }
                 try {
                     if(output.has("id")) {
-                        UserDataHelper userDataHelper = new UserDataHelper(getApplicationContext());
-                        userDataHelper.addUser(new User(output.getInt("id"), output.getString("name"), output.getString("type")));
-                        CheckJobs checkJobs = new CheckJobs();
-                        checkJobs.checkJobsRecurExecute(userDataHelper.GetLoginID());
-                        Intent i = new Intent(getApplicationContext(), ContractorHome.class);
-                        startActivity(i);
+                        if (output.getString("type").equals("Contractor")) {
+                            UserDataHelper userDataHelper = new UserDataHelper(getApplicationContext());
+                            userDataHelper.Logout();
+                            userDataHelper.addUser(new User(output.getInt("id"), output.getString("name"), output.getString("type")));
+                            CheckJobs checkJobs = new CheckJobs();
+                            checkJobs.checkJobsRecurExecute(userDataHelper.GetLoginID());
+                            Intent i = new Intent(getApplicationContext(), ContractorHome.class);
+                            startActivity(i);
+                        }
+                        if (output.getString("type").equals("Client")) {
+                            UserDataHelper userDataHelper = new UserDataHelper(getApplicationContext());
+                            userDataHelper.Logout();
+                            userDataHelper.addUser(new User(output.getInt("id"), output.getString("name"), output.getString("type")));
+                            Intent i = new Intent(getApplicationContext(), client_home.class);
+                            startActivity(i);
+                        }
                     }
                     else {
                         Toast.makeText(LoginActivity.this, output.getString("fail"), Toast.LENGTH_SHORT).show();
@@ -72,10 +82,14 @@ public class LoginActivity extends Activity {
         });
         UserDataHelper userDataHelper = new UserDataHelper(getApplicationContext());
 
-        if(userDataHelper.IsLoggedIn()) {
+        if(userDataHelper.IsLoggedInContractor()) {
             CheckJobs checkJobs = new CheckJobs();
             checkJobs.checkJobsRecurExecute(userDataHelper.GetLoginID());
             Intent i = new Intent(getApplicationContext(), ContractorHome.class);
+            startActivity(i);
+        }
+        if(userDataHelper.IsLoggedInClient()) {
+            Intent i = new Intent(getApplicationContext(), client_home.class);
             startActivity(i);
         }
 

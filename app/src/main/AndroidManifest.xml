@@ -36,6 +36,19 @@
                 android:enabled="true"
                 android:exported="true">
         </service>
+
+        <activity
+                android:name=".client_home"
+                android:label="@string/title_activity_client_home">
+        </activity>
+        <activity
+                android:name=".CreateRequest"
+                android:label="@string/title_activity_create_request">
+        </activity>
+        <activity
+                android:name=".ViewRequest"
+                android:label="@string/title_activity_view_request">
+        </activity>
     </application>
 
 </manifest>

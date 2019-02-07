@@ -42,8 +42,8 @@ public class DataBaseConnectionHelper {
                     URL url = new URL(urlString);
                     HttpURLConnection con = (HttpURLConnection) url.openConnection();
                     String response = "";
-                    con.setReadTimeout(15000);
-                    con.setConnectTimeout(15000);
+                    con.setReadTimeout(13000);
+                    con.setConnectTimeout(13000);
                     con.setRequestMethod("POST");
                     con.setDoInput(true);
                     con.setDoOutput(true);
@@ -81,7 +81,8 @@ public class DataBaseConnectionHelper {
         GetJSON getJSON = new GetJSON();
         getJSON.execute();
         try {
-            getJSON.get(5,  TimeUnit.SECONDS);
+            String bob = getJSON.get(20,  TimeUnit.SECONDS);
+            String hi = "hi";
         } catch (ExecutionException e) {
             e.printStackTrace();
         } catch (InterruptedException e) {

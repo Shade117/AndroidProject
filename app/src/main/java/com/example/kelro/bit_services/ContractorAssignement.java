@@ -37,6 +37,7 @@ public class ContractorAssignement extends Activity {
         AssignmentDataHelper assignmentDataHelper = new AssignmentDataHelper(getApplicationContext(), false);
         Cursor data = assignmentDataHelper.GetAllToCursor();
         ArrayList<String> list = new ArrayList<>();
+        ArrayList<Integer> listid = new ArrayList<>();
         while(data.move(1)) {
             if (!data.getString(1).equals("Task")) {
                 SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
@@ -58,14 +59,16 @@ public class ContractorAssignement extends Activity {
                             data.getString(2) + "\n" +
                             "Status: " + data.getString(3) + "\n" +
                             "Date: " + sdf.format(date));
+                listid.add(data.getInt(data.getColumnIndex("id")));
             }
         }
+        final ArrayList<Integer> finalidlist = listid;
         ListAdapter adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, list);
         lvAssignemnts.setAdapter(adapter);
         lvAssignemnts.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                String itemid  = lvAssignemnts.getItemAtPosition(position).toString().substring(0, 1);
+                int itemid  = finalidlist.get(position);
                 Intent taskdetails = new Intent(getApplicationContext(), TaskDetails.class);
                 taskdetails.putExtra("id", itemid);
                 startActivity(taskdetails);
@@ -108,7 +111,7 @@ public class ContractorAssignement extends Activity {
                         }
                     }
                     else {
-                        Toast.makeText(getApplicationContext(), "SHIT", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getApplicationContext(), "Failed", Toast.LENGTH_SHORT).show();
                     }
                 } catch (JSONException e) {
                     e.printStackTrace();

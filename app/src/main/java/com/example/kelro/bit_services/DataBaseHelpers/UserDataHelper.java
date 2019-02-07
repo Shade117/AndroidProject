@@ -72,6 +72,38 @@ public class UserDataHelper extends SQLiteOpenHelper {
         }
     }
 
+    public boolean IsLoggedInContractor() {
+        db = this.getReadableDatabase();
+        Cursor data = db.rawQuery("SELECT "+KEY_TYPE+" from "+TABLE_NAME, null);
+        if(data.moveToNext()) {
+            do {
+                if (data.getString(data.getColumnIndex(KEY_TYPE)).equals("Contractor")) {
+                    return true;
+                }
+            } while (data.moveToNext());
+            return false;
+        }
+        else {
+            return false;
+        }
+    }
+    public boolean IsLoggedInClient() {
+        db = this.getReadableDatabase();
+        Cursor data = db.rawQuery("SELECT "+KEY_TYPE+" from "+TABLE_NAME, null);
+        if(data.moveToNext()) {
+            do {
+                if (data.getString(data.getColumnIndex(KEY_TYPE)).equals("Client")) {
+                    return true;
+                }
+            } while (data.moveToNext());
+            return false;
+        }
+        else {
+            return false;
+        }
+    }
+
+
     public void Logout() {
         db = this.getWritableDatabase();
         db.execSQL("DELETE FROM "+ TABLE_NAME);

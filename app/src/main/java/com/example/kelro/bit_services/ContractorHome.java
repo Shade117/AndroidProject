@@ -5,11 +5,11 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ProgressBar;
 import com.example.kelro.bit_services.DataBaseHelpers.UserDataHelper;
 
 public class ContractorHome extends Activity {
     Button btnLogout, btnAssignments, btnUnavailabilitys;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
